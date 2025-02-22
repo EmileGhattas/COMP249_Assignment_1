@@ -1,5 +1,5 @@
 @startuml
-'https://plantuml.com/class-diagram
+' https://plantuml.com/class-diagram
 
 package vehicle {
     class Vehicle {
@@ -7,61 +7,81 @@ package vehicle {
         # String make
         # String model
         # int year
-        + setMake(String make)
-        + setYear(int year)
-        + setModel(String model)
-        + getMake(): String
-        + getYear(): int
-        + getModel(): String
+        # Client leasedBy
         + getPlateNumber(): String
+        + getMake(): String
+        + getModel(): String
+        + getYear(): int
+        + setMake(String make)
+        + setModel(String model)
+        + setYear(int year)
+        + isLeased(): boolean
+        + leaseTo(Client client)
+        + returnVehicle()
+        + toString(): String
+        + equals(Object obj): boolean
     }
 
     class Car extends Vehicle {
         # int maxPassengers
-        + setMaxPassengers(int maxPassengers)
         + getMaxPassengers(): int
+        + setMaxPassengers(int maxPassengers)
+        + toString(): String
+        + equals(Object obj): boolean
     }
 
     class Truck extends Vehicle {
         # int maxCapacity
-        + setMaxCapacity(int maxCapacity)
         + getMaxCapacity(): int
+        + setMaxCapacity(int maxCapacity)
+        + toString(): String
+        + equals(Object obj): boolean
     }
 
     class ElectricCar extends Car {
-        - int maxAutonomy
-        + setMaxAutonomy(int maxAutonomy)
-        + getMaxAutonomy(): int
+        - int autonomyRange
+        + getAutonomyRange(): int
+        + setAutonomyRange(int autonomyRange)
+        + toString(): String
+        + equals(Object obj): boolean
     }
 
     class GasolineCar extends Car {
+        + toString(): String
+        + equals(Object obj): boolean
     }
 
     class ElectricTruck extends Truck {
-        - int maxAutonomy
-        + setMaxAutonomy(int maxAutonomy)
-        + getMaxAutonomy(): int
+        - int autonomyRange
+        + getAutonomyRange(): int
+        + setAutonomyRange(int autonomyRange)
+        + toString(): String
+        + equals(Object obj): boolean
     }
 
     class DieselTruck extends Truck {
         - int fuelTankCapacity
-        + setFuelTankCapacity(int fuelTankCapacity)
         + getFuelTankCapacity(): int
+        + setFuelTankCapacity(int fuelTankCapacity)
+        + toString(): String
+        + equals(Object obj): boolean
     }
 }
 
 package client {
     class Client {
-        - String clientName
-        - Vehicle clientVehicle
-        + setClientName(String clientName)
-        + getClientName(): String
-        + setClientVehicle(Vehicle vehicle)
-        + getClientVehicle(): Vehicle
+        - String name
+        - String id
+        + getName(): String
+        + setName(String name)
+        + getId(): String
+        + setId(String id)
+        + toString(): String
+        + equals(Object obj): boolean
     }
-
-    Client --> Vehicle : owns
 }
 
+' Association: Each Vehicle may be leased by a Client.
+Vehicle --> Client : leasedBy
 
 @enduml
