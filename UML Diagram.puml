@@ -1,0 +1,67 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+package vehicle {
+    class Vehicle {
+        # String plateNumber
+        # String make
+        # String model
+        # int year
+        + setMake(String make)
+        + setYear(int year)
+        + setModel(String model)
+        + getMake(): String
+        + getYear(): int
+        + getModel(): String
+        + getPlateNumber(): String
+    }
+
+    class Car extends Vehicle {
+        # int maxPassengers
+        + setMaxPassengers(int maxPassengers)
+        + getMaxPassengers(): int
+    }
+
+    class Truck extends Vehicle {
+        # int maxCapacity
+        + setMaxCapacity(int maxCapacity)
+        + getMaxCapacity(): int
+    }
+
+    class ElectricCar extends Car {
+        - int maxAutonomy
+        + setMaxAutonomy(int maxAutonomy)
+        + getMaxAutonomy(): int
+    }
+
+    class GasolineCar extends Car {
+    }
+
+    class ElectricTruck extends Truck {
+        - int maxAutonomy
+        + setMaxAutonomy(int maxAutonomy)
+        + getMaxAutonomy(): int
+    }
+
+    class DieselTruck extends Truck {
+        - int fuelTankCapacity
+        + setFuelTankCapacity(int fuelTankCapacity)
+        + getFuelTankCapacity(): int
+    }
+}
+
+package client {
+    class Client {
+        - String clientName
+        - Vehicle clientVehicle
+        + setClientName(String clientName)
+        + getClientName(): String
+        + setClientVehicle(Vehicle vehicle)
+        + getClientVehicle(): Vehicle
+    }
+
+    Client --> Vehicle : owns
+}
+
+
+@enduml
