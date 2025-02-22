@@ -57,11 +57,11 @@ public class Main {
     // Initialize the global arrays based on user input.
     private static void initializeSystem() {
         System.out.println("Enter the maximum number of vehicles:");
-        int maxVehicles = getValidIntInput();
+        int maxVehicles = getPositiveIntInput();
         vehicles = new Vehicle[maxVehicles];
 
         System.out.println("Enter the maximum number of clients:");
-        int maxClients = getValidIntInput();
+        int maxClients = getPositiveIntInput();
         clients = new Client[maxClients];
     }
 
@@ -542,5 +542,15 @@ public class Main {
             scanner.next();
         }
         return scanner.nextInt();
+    }
+    private static int getPositiveIntInput() {
+        int num;
+        do {
+            num = getValidIntInput();
+            if (num <= 0) {
+                System.out.println("Please enter a positive number.");
+            }
+        } while (num <= 0);
+        return num;
     }
 }
