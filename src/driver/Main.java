@@ -538,17 +538,18 @@ public class Main {
     // Ensures that only a valid integer is read.
     private static int getValidIntInput() {
         while (!scanner.hasNextInt()) {
-            System.out.println("Invalid input! Please enter a number.");
-            scanner.next();
+            System.out.println("Invalid input! Please enter a valid number.");
+            scanner.next(); // Discard the invalid input.
         }
         return scanner.nextInt();
     }
+
     private static int getPositiveIntInput() {
         int num;
         do {
             num = getValidIntInput();
             if (num <= 0) {
-                System.out.println("Please enter a positive number.");
+                System.out.println("Invalid input! Please enter a positive number.");
             }
         } while (num <= 0);
         return num;
