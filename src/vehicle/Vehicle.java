@@ -1,3 +1,9 @@
+//-----------------------------------------------------------------
+// Assignment 1
+// Question: Vehicle Fleet Management & Leasing System
+// Written by: Emile Ghattas (id: 40282552) Zeidan Chabo (id:40281196)
+//-----------------------------------------------------------------
+
 package vehicle;
 
 import client.Client;

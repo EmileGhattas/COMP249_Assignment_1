@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------
 // Assignment 1
 // Question: Vehicle Fleet Management & Leasing System
-// Written by: [Your Name, Your Student ID]
+// Written by: Emile Ghattas (id: 40282552) Zeidan Chabo (id:40281196)
 //-----------------------------------------------------------------
 
 package driver;
