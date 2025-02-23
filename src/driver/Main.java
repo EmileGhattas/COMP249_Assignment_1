@@ -20,33 +20,40 @@ import java.util.Scanner;
  *   - Client Management (add, edit, delete)
  *   - Leasing Operations (lease, return, view leased vehicles)
  *   - Additional Operations (find largest diesel truck, deep-copy electric trucks array)
+ *
+ * The program ensures that all user inputs are validated. For example, when adding a vehicle,
+ * only the following types are accepted (case-insensitive): "Diesel Truck", "Electric Car",
+ * "Gasoline Car", and "Electric Truck". If an invalid type is entered, the user is prompted again.
+ *
+ * For each vehicle, type-specific attributes are prompted:
+ *   - Truck: maximum capacity (kg)
+ *   - Electric Car & Electric Truck: maximum autonomy range (km)
+ *   - Diesel Truck: fuel tank capacity (liters)
+ *   - Gasoline Car: maximum number of passengers
  */
 
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
-    // Global arrays for storing vehicles and clients during the menu-driven session
+    // Global arrays for storing vehicles and clients during the session
     private static Vehicle[] vehicles;
     private static Client[] clients;
     private static int vehicleCount = 0;
     private static int clientCount = 0;
 
     public static void main(String[] args) {
-        // Display a welcome message that includes your name
         displayWelcomeMessage();
-
-        // Prompt the user to choose the interface mode
-        System.out.println("Choose interface mode:");
-        System.out.println("1 - Menu-Driven Interface");
-        System.out.println("2 - Predefined Scenario (Testing)");
+        System.out.println("-----------------------------------------");
+        System.out.println("| Choose interface mode:                |");
+        System.out.println("| 1 - Menu-Driven Interface             |");
+        System.out.println("| 2 - Predefined Scenario (Testing)     |");
+        System.out.println("-----------------------------------------");
         int mode = getValidInt("Enter mode (1 or 2): ");
 
         if (mode == 1) {
-            // Initialize the system arrays and run the menu interface
             initializeSystem();
             mainMenu();
             System.out.println("Program terminated. Goodbye!");
         } else if (mode == 2) {
-            // Run the predefined scenario for testing
             predefinedScenario();
             System.out.println("Predefined scenario completed. Goodbye!");
         } else {
@@ -54,12 +61,15 @@ public class Main {
         }
     }
 
-    // Displays a welcome message that includes your name.
+    // Displays a welcome message.
     private static void displayWelcomeMessage() {
-        System.out.println("Welcome to Emile and Zeidan's RoyalRentals Vehicle Management System!");
+        System.out.println("*************************************************************");
+        System.out.println("               WELCOME TO EMILE AND ZEIDAN'S                 ");
+        System.out.println("          ROYAL RENTAL VEHICLE MANAGEMENT SYSTEM             ");
+        System.out.println("*************************************************************\n");
     }
 
-    // Initializes the arrays for vehicles and clients based on user input.
+    // Initializes the arrays based on user input.
     private static void initializeSystem() {
         int maxVehicles = getPositiveInt("Enter the maximum number of vehicles: ");
         vehicles = new Vehicle[maxVehicles];
@@ -68,16 +78,17 @@ public class Main {
         clients = new Client[maxClients];
     }
 
-    // Displays the main menu and processes user choices.
+    // Displays the main menu and processes user selections.
     private static void mainMenu() {
         boolean exit = false;
         while (!exit) {
-            System.out.println("\nMain Menu:");
+            System.out.println("\n========== Main Menu ==========");
             System.out.println("1 - Vehicle Management");
             System.out.println("2 - Client Management");
             System.out.println("3 - Leasing Operations");
             System.out.println("4 - Additional Operations");
             System.out.println("5 - Exit");
+            System.out.println("===============================");
             int choice = getValidInt("Enter your choice: ");
 
             switch (choice) {
@@ -92,10 +103,8 @@ public class Main {
     }
 
     // ========================= Vehicle Management =========================
-
-    // Provides the vehicle management submenu.
     private static void vehicleManagement() {
-        System.out.println("\nVehicle Management:");
+        System.out.println("\n--- Vehicle Management ---");
         System.out.println("1 - Add Vehicle");
         System.out.println("2 - Delete Vehicle");
         System.out.println("3 - Update Vehicle");
@@ -110,34 +119,55 @@ public class Main {
         }
     }
 
-    // Adds a vehicle based on user input.
+    // Adds a vehicle with prompts for common and type-specific attributes.
     private static void addVehicle() {
         if (vehicleCount >= vehicles.length) {
             System.out.println("Vehicle storage is full.");
             return;
         }
-        String type = getNonEmptyString("Enter vehicle type (DieselTruck, ElectricCar, GasolineCar, ElectricTruck): ");
+
+        String type;
+        while (true) {
+            type = getNonEmptyString("Enter vehicle type (Diesel Truck, Electric Car, Gasoline Car, Electric Truck): ");
+            if (type.equalsIgnoreCase("Diesel Truck") ||
+                    type.equalsIgnoreCase("Electric Car") ||
+                    type.equalsIgnoreCase("Gasoline Car") ||
+                    type.equalsIgnoreCase("Electric Truck")) {
+                break;
+            } else {
+                System.out.println("Invalid vehicle type. Please enter exactly: Diesel Truck, Electric Car, Gasoline Car, Electric Truck.");
+            }
+        }
+
         String make = getNonEmptyString("Enter make: ");
         String model = getNonEmptyString("Enter model: ");
         int year = getValidInt("Enter year: ");
 
         Vehicle vehicle = null;
-        // Create the vehicle based on the type provided
-        switch (type.toLowerCase()) {
-            case "dieseltruck" -> vehicle = new DieselTruck(make, model, year, 2000, 100);
-            case "electriccar" -> vehicle = new ElectricCar(make, model, year, 5, 400);
-            case "gasolinecar" -> vehicle = new GasolineCar(make, model, year, 5);
-            case "electrictruck" -> vehicle = new ElectricTruck(make, model, year, 3000, 500);
-            default -> {
-                System.out.println("Invalid vehicle type.");
-                return;
-            }
+        if (type.equalsIgnoreCase("Diesel Truck")) {
+            int maxCapacity = getValidInt("Enter maximum capacity (kg): ");
+            int fuelTankCapacity = getValidInt("Enter fuel tank capacity (liters): ");
+            vehicle = new DieselTruck(make, model, year, maxCapacity, fuelTankCapacity);
+        } else if (type.equalsIgnoreCase("Electric Truck")) {
+            int maxCapacity = getValidInt("Enter maximum capacity (kg): ");
+            int autonomyRange = getValidInt("Enter maximum autonomy range (km): ");
+            vehicle = new ElectricTruck(make, model, year, maxCapacity, autonomyRange);
+        } else if (type.equalsIgnoreCase("Gasoline Car")) {
+            int maxPassengers = getValidInt("Enter maximum number of passengers: ");
+            vehicle = new GasolineCar(make, model, year, maxPassengers);
+        } else if (type.equalsIgnoreCase("Electric Car")) {
+            int maxPassengers = getValidInt("Enter maximum number of passengers: ");
+            int autonomyRange = getValidInt("Enter maximum autonomy range (km): ");
+            vehicle = new ElectricCar(make, model, year, maxPassengers, autonomyRange);
         }
+
         vehicles[vehicleCount++] = vehicle;
-        System.out.println("Vehicle added successfully: " + vehicle);
+        // Confirmation message with make and plate number.
+        System.out.printf("Vehicle added successfully: Make: %s - Plate Number: %s%n",
+                vehicle.getMake(), vehicle.getPlateNumber());
     }
 
-    // Deletes a vehicle identified by its plate number.
+    // Deletes a vehicle by plate number.
     private static void deleteVehicle() {
         String plateNumber = getNonEmptyString("Enter the plate number of the vehicle to delete: ");
         int index = findVehicleIndexByPlate(plateNumber);
@@ -145,7 +175,6 @@ public class Main {
             System.out.println("Vehicle not found.");
             return;
         }
-        // Shift elements to remove the deleted vehicle
         for (int i = index; i < vehicleCount - 1; i++) {
             vehicles[i] = vehicles[i + 1];
         }
@@ -153,7 +182,7 @@ public class Main {
         System.out.println("Vehicle deleted successfully.");
     }
 
-    // Updates the attributes of an existing vehicle.
+    // Updates an existing vehicle's common and type-specific attributes.
     private static void updateVehicle() {
         String plateNumber = getNonEmptyString("Enter the plate number of the vehicle to update: ");
         int index = findVehicleIndexByPlate(plateNumber);
@@ -162,24 +191,53 @@ public class Main {
             return;
         }
         Vehicle vehicle = vehicles[index];
-        System.out.println("Current vehicle information: " + vehicle);
+        System.out.println("\nCurrent vehicle information:");
+        System.out.println(formatVehicle(vehicle));
+
         String newMake = getNonEmptyString("Enter new make: ");
         String newModel = getNonEmptyString("Enter new model: ");
         int newYear = getValidInt("Enter new year: ");
-
         vehicle.setMake(newMake);
         vehicle.setModel(newModel);
         vehicle.setYear(newYear);
-        System.out.println("Vehicle updated successfully: " + vehicle);
+
+        if (vehicle instanceof DieselTruck) {
+            DieselTruck dt = (DieselTruck) vehicle;
+            int newMaxCapacity = getValidInt("Enter new maximum capacity (kg): ");
+            int newFuelTankCapacity = getValidInt("Enter new fuel tank capacity (liters): ");
+            dt.setMaxCapacity(newMaxCapacity);
+            dt.setFuelTankCapacity(newFuelTankCapacity);
+        } else if (vehicle instanceof ElectricTruck) {
+            ElectricTruck et = (ElectricTruck) vehicle;
+            int newMaxCapacity = getValidInt("Enter new maximum capacity (kg): ");
+            int newAutonomyRange = getValidInt("Enter new maximum autonomy range (km): ");
+            et.setMaxCapacity(newMaxCapacity);
+            et.setAutonomyRange(newAutonomyRange);
+        } else if (vehicle instanceof GasolineCar) {
+            GasolineCar gc = (GasolineCar) vehicle;
+            int newMaxPassengers = getValidInt("Enter new maximum number of passengers: ");
+            gc.setMaxPassengers(newMaxPassengers);
+        } else if (vehicle instanceof ElectricCar) {
+            ElectricCar ec = (ElectricCar) vehicle;
+            int newMaxPassengers = getValidInt("Enter new maximum number of passengers: ");
+            int newAutonomyRange = getValidInt("Enter new maximum autonomy range (km): ");
+            ec.setMaxPassengers(newMaxPassengers);
+            ec.setAutonomyRange(newAutonomyRange);
+        }
+        System.out.println("\nVehicle updated successfully:");
+        System.out.println(formatVehicle(vehicle));
     }
 
-    // Lists vehicles filtered by the provided category.
+    // Lists vehicles by category using the neat format.
     private static void listVehiclesByCategory() {
-        String category = getNonEmptyString("Enter vehicle category to list (DieselTruck, ElectricCar, GasolineCar, ElectricTruck): ");
+        String category = getNonEmptyString("Enter vehicle category to list (Diesel Truck, Electric Car, Gasoline Car, Electric Truck): ");
+        System.out.println("\n--- Vehicles in Category: " + category + " ---");
         boolean found = false;
         for (int i = 0; i < vehicleCount; i++) {
-            if (vehicles[i].getClass().getSimpleName().equalsIgnoreCase(category)) {
-                System.out.println(vehicles[i]);
+            // Compare class names ignoring spaces.
+            String className = vehicles[i].getClass().getSimpleName();
+            if (className.replaceAll(" ", "").equalsIgnoreCase(category.replaceAll(" ", ""))) {
+                System.out.println(formatVehicle(vehicles[i]));
                 found = true;
             }
         }
@@ -188,7 +246,7 @@ public class Main {
         }
     }
 
-    // Helper: Finds and returns the index of a vehicle by its plate number.
+    // Helper: Finds the index of a vehicle by its plate number.
     private static int findVehicleIndexByPlate(String plateNumber) {
         for (int i = 0; i < vehicleCount; i++) {
             if (vehicles[i].getPlateNumber().equalsIgnoreCase(plateNumber)) {
@@ -199,10 +257,8 @@ public class Main {
     }
 
     // ========================= Client Management =========================
-
-    // Provides the client management submenu.
     private static void clientManagement() {
-        System.out.println("\nClient Management:");
+        System.out.println("\n--- Client Management ---");
         System.out.println("1 - Add Client");
         System.out.println("2 - Edit Client");
         System.out.println("3 - Delete Client");
@@ -215,7 +271,7 @@ public class Main {
         }
     }
 
-    // Adds a new client based on user input.
+    // Adds a client with confirmation.
     private static void addClient() {
         if (clientCount >= clients.length) {
             System.out.println("Client storage is full.");
@@ -225,10 +281,10 @@ public class Main {
         String id = getNonEmptyString("Enter client ID: ");
         Client client = new Client(name, id);
         clients[clientCount++] = client;
-        System.out.println("Client added successfully: " + client);
+        System.out.printf("Client added successfully: Name: %s - ID: %s%n", client.getName(), client.getId());
     }
 
-    // Edits an existing client's details.
+    // Edits a client's information.
     private static void editClient() {
         String id = getNonEmptyString("Enter the client ID to edit: ");
         int index = findClientIndexById(id);
@@ -237,13 +293,13 @@ public class Main {
             return;
         }
         Client client = clients[index];
-        System.out.println("Current client information: " + client);
+        System.out.println("Current client information: " + client.getName() + " - ID: " + client.getId());
         String newName = getNonEmptyString("Enter new name: ");
         client.setName(newName);
-        System.out.println("Client updated successfully: " + client);
+        System.out.printf("Client updated successfully: Name: %s - ID: %s%n", client.getName(), client.getId());
     }
 
-    // Deletes a client by its ID.
+    // Deletes a client by ID.
     private static void deleteClient() {
         String id = getNonEmptyString("Enter the client ID to delete: ");
         int index = findClientIndexById(id);
@@ -251,7 +307,6 @@ public class Main {
             System.out.println("Client not found.");
             return;
         }
-        // Shift elements to remove the deleted client
         for (int i = index; i < clientCount - 1; i++) {
             clients[i] = clients[i + 1];
         }
@@ -259,7 +314,7 @@ public class Main {
         System.out.println("Client deleted successfully.");
     }
 
-    // Helper: Finds and returns the index of a client by its ID.
+    // Helper: Finds the index of a client by its ID.
     private static int findClientIndexById(String id) {
         for (int i = 0; i < clientCount; i++) {
             if (clients[i].getId().equalsIgnoreCase(id)) {
@@ -270,10 +325,8 @@ public class Main {
     }
 
     // ========================= Leasing Operations =========================
-
-    // Provides the leasing operations submenu.
     private static void leasingOperations() {
-        System.out.println("\nLeasing Operations:");
+        System.out.println("\n--- Leasing Operations ---");
         System.out.println("1 - Lease Vehicle");
         System.out.println("2 - Return Vehicle");
         System.out.println("3 - Show All Vehicles Leased by a Client");
@@ -307,7 +360,9 @@ public class Main {
             System.out.println("Vehicle is already leased.");
         } else {
             vehicle.leaseTo(clients[clientIndex]);
-            System.out.println("Vehicle leased successfully to client: " + clients[clientIndex]);
+            System.out.printf("Vehicle leased successfully: Make: %s - Plate: %s, leased to %s - ID: %s%n",
+                    vehicle.getMake(), vehicle.getPlateNumber(),
+                    clients[clientIndex].getName(), clients[clientIndex].getId());
         }
     }
 
@@ -324,11 +379,12 @@ public class Main {
             System.out.println("Vehicle is not currently leased.");
         } else {
             vehicle.returnVehicle();
-            System.out.println("Vehicle returned successfully.");
+            System.out.printf("Vehicle returned successfully: Make: %s - Plate: %s%n",
+                    vehicle.getMake(), vehicle.getPlateNumber());
         }
     }
 
-    // Displays all vehicles leased by a specific client.
+    // Displays all vehicles leased by a specific client using the custom format.
     private static void showVehiclesLeasedByClient() {
         String clientId = getNonEmptyString("Enter client ID: ");
         int clientIndex = findClientIndexById(clientId);
@@ -337,11 +393,11 @@ public class Main {
             return;
         }
         Client client = clients[clientIndex];
-        System.out.println("Vehicles leased by " + client + ":");
+        System.out.println("\n--- Vehicles Leased by " + client.getName() + " (ID: " + client.getId() + ") ---");
         boolean found = false;
         for (int i = 0; i < vehicleCount; i++) {
             if (vehicles[i].isLeased() && vehicles[i].getLeasedBy().equals(client)) {
-                System.out.println(vehicles[i]);
+                System.out.println(formatVehicle(vehicles[i]));
                 found = true;
             }
         }
@@ -350,13 +406,13 @@ public class Main {
         }
     }
 
-    // Displays all leased vehicles.
+    // Displays all leased vehicles using the custom format.
     private static void showAllLeasedVehicles() {
-        System.out.println("All leased vehicles:");
+        System.out.println("\n--- All Leased Vehicles ---");
         boolean found = false;
         for (int i = 0; i < vehicleCount; i++) {
             if (vehicles[i].isLeased()) {
-                System.out.println(vehicles[i]);
+                System.out.println(formatVehicle(vehicles[i]));
                 found = true;
             }
         }
@@ -366,35 +422,8 @@ public class Main {
     }
 
     // ========================= Additional Operations =========================
-
-    // Returns the DieselTruck with the largest capacity from an array.
-    public static DieselTruck getLargestTruck(DieselTruck[] dieselTrucks) {
-        DieselTruck largest = null;
-        for (DieselTruck dt : dieselTrucks) {
-            if (dt != null) {
-                if (largest == null || dt.getMaxCapacity() > largest.getMaxCapacity()) {
-                    largest = dt;
-                }
-            }
-        }
-        return largest;
-    }
-
-    // Returns a deep copy of an array of ElectricTrucks using the copy constructor.
-    public static ElectricTruck[] copyVehicles(ElectricTruck[] electricTrucks) {
-        if (electricTrucks == null) return null;
-        ElectricTruck[] copy = new ElectricTruck[electricTrucks.length];
-        for (int i = 0; i < electricTrucks.length; i++) {
-            if (electricTrucks[i] != null) {
-                copy[i] = new ElectricTruck(electricTrucks[i]); // using copy constructor
-            }
-        }
-        return copy;
-    }
-
-    // Provides the additional operations submenu.
     private static void additionalOperations() {
-        System.out.println("\nAdditional Operations:");
+        System.out.println("\n--- Additional Operations ---");
         System.out.println("1 - Get Diesel Truck with Largest Capacity");
         System.out.println("2 - Deep Copy Electric Trucks Array");
         int choice = getValidInt("Enter your choice: ");
@@ -413,7 +442,8 @@ public class Main {
                 }
                 DieselTruck largest = getLargestTruck(dieselTrucks);
                 if (largest != null)
-                    System.out.println("Diesel Truck with largest capacity: " + largest);
+                    System.out.printf("Diesel Truck with largest capacity: %s - Plate: %s%n",
+                            largest.getMake(), largest.getPlateNumber());
                 else
                     System.out.println("No diesel trucks available.");
             }
@@ -430,9 +460,9 @@ public class Main {
                         electricTrucks[idx++] = (ElectricTruck) vehicles[i];
                 }
                 ElectricTruck[] copied = copyVehicles(electricTrucks);
-                System.out.println("Electric trucks have been deep-copied:");
+                System.out.println("\nDeep Copied Electric Trucks:");
                 for (ElectricTruck et : copied) {
-                    System.out.println(et);
+                    System.out.println(formatVehicle(et));
                 }
             }
             default -> System.out.println("Invalid choice.");
@@ -440,9 +470,6 @@ public class Main {
     }
 
     // ========================= Predefined Scenario (Testing) =========================
-
-    // Executes a predefined scenario that creates sample vehicles and clients, tests methods,
-    // and demonstrates additional operations.
     private static void predefinedScenario() {
         System.out.println("\n--- Predefined Scenario ---");
 
@@ -464,64 +491,43 @@ public class Main {
         GasolineCar gc3 = new GasolineCar("Ford", "Focus", 2020, 5);
 
         // Create sample clients (at least 3)
-        Client client1 = new Client("Alice", "C1001");
-        Client client2 = new Client("Bob", "C1002");
-        Client client3 = new Client("Charlie", "C1003");
+        Client client1 = new Client("Emile", "123");
+        Client client2 = new Client("Alice", "C1001");
+        Client client3 = new Client("Bob", "C1002");
 
-        // Display vehicles using toString()
+        // For demonstration, add a few vehicles and clients into the global arrays.
+        vehicles = new Vehicle[10];
+        clients = new Client[10];
+        vehicles[vehicleCount++] = dt1;
+        vehicles[vehicleCount++] = et1;
+        vehicles[vehicleCount++] = gc1;
+        clients[clientCount++] = client1;
+        clients[clientCount++] = client2;
+        clients[clientCount++] = client3;
+
+        // Display vehicles using the neat format.
         System.out.println("\n--- Displaying Vehicles ---");
-        System.out.println(dt1);
-        System.out.println(dt2);
-        System.out.println(dt3);
-        System.out.println(et1);
-        System.out.println(et2);
-        System.out.println(et3);
-        System.out.println(ec1);
-        System.out.println(ec2);
-        System.out.println(ec3);
-        System.out.println(gc1);
-        System.out.println(gc2);
-        System.out.println(gc3);
+        for (int i = 0; i < vehicleCount; i++) {
+            System.out.println(formatVehicle(vehicles[i]));
+        }
 
-        // Display clients
+        // Display clients neatly.
         System.out.println("\n--- Displaying Clients ---");
-        System.out.println(client1);
-        System.out.println(client2);
-        System.out.println(client3);
+        for (int i = 0; i < clientCount; i++) {
+            System.out.printf("Client: %-15s | ID: %-10s%n", clients[i].getName(), clients[i].getId());
+        }
 
-        // Test equals() method:
-        System.out.println("\n--- Testing equals() Method ---");
-        // Case 1: Different classes
-        System.out.println("Comparing DieselTruck dt1 and ElectricCar ec1 (should be false): " + dt1.equals(ec1));
-        // Case 2: Same class but different attribute values
-        DieselTruck dtDifferent = new DieselTruck("Ford", "F-150", 2021, 2500, 150);
-        System.out.println("Comparing DieselTruck dt1 and dtDifferent (different year, should be false): " + dt1.equals(dtDifferent));
-        // Case 3: Same class with identical attribute values (except plate number)
-        DieselTruck dtIdentical = new DieselTruck(dt1);
-        System.out.println("Comparing DieselTruck dt1 and its copy (should be true): " + dt1.equals(dtIdentical));
-
-        // Create arrays for each type of vehicle and one for all vehicles
-        DieselTruck[] dieselTrucks = { dt1, dt2, dt3 };
-        ElectricTruck[] electricTrucks = { et1, et2, et3 };
-        ElectricCar[] electricCars = { ec1, ec2, ec3 };
-        GasolineCar[] gasolineCars = { gc1, gc2, gc3 };
-        Vehicle[] allVehicles = { dt1, dt2, dt3, et1, et2, et3, ec1, ec2, ec3, gc1, gc2, gc3 };
-
-        // Call getLargestTruck() on diesel trucks array.
-        DieselTruck largestDiesel = getLargestTruck(dieselTrucks);
-        System.out.println("\nDiesel Truck with the largest capacity: " + (largestDiesel != null ? largestDiesel : "None found"));
-
-        // Call copyVehicles() on electric trucks array.
-        ElectricTruck[] copiedElectricTrucks = copyVehicles(electricTrucks);
-        System.out.println("\nDeep copied Electric Trucks:");
-        for (ElectricTruck et : copiedElectricTrucks) {
-            System.out.println(et);
+        // Simulate leasing.
+        dt1.leaseTo(client1);
+        System.out.println("\n--- Vehicles Leased by " + client1.getName() + " (ID: " + client1.getId() + ") ---");
+        for (int i = 0; i < vehicleCount; i++) {
+            if (vehicles[i].isLeased() && vehicles[i].getLeasedBy().equals(client1)) {
+                System.out.println(formatVehicle(vehicles[i]));
+            }
         }
     }
 
     // ========================= Input Checking Methods =========================
-
-    // Reusable method to get a valid integer from the user.
     private static int getValidInt(String prompt) {
         int num;
         while (true) {
@@ -537,7 +543,6 @@ public class Main {
         }
     }
 
-    // Reusable method to get a positive integer.
     private static int getPositiveInt(String prompt) {
         int num;
         while (true) {
@@ -550,7 +555,6 @@ public class Main {
         }
     }
 
-    // Reusable method to get a non-empty string.
     private static String getNonEmptyString(String prompt) {
         String input;
         while (true) {
@@ -562,5 +566,56 @@ public class Main {
                 System.out.println("Input cannot be empty. Please try again.");
             }
         }
+    }
+
+    // ========================= Formatting Helper =========================
+    // Returns a neat, custom formatted string for each vehicle.
+    private static String formatVehicle(Vehicle v) {
+        String formatted;
+        if (v instanceof DieselTruck) {
+            DieselTruck dt = (DieselTruck) v;
+            formatted = String.format("Make: %-15s | Plate: %-8s | Model: %-10s | Year: %4d | Capacity: %4d kg | Fuel Tank: %3d L",
+                    dt.getMake(), dt.getPlateNumber(), dt.getModel(), dt.getYear(), dt.getMaxCapacity(), dt.getFuelTankCapacity());
+        } else if (v instanceof ElectricTruck) {
+            ElectricTruck et = (ElectricTruck) v;
+            formatted = String.format("Make: %-15s | Plate: %-8s | Model: %-10s | Year: %4d | Capacity: %4d kg | Autonomy: %3d km",
+                    et.getMake(), et.getPlateNumber(), et.getModel(), et.getYear(), et.getMaxCapacity(), et.getAutonomyRange());
+        } else if (v instanceof GasolineCar) {
+            GasolineCar gc = (GasolineCar) v;
+            formatted = String.format("Make: %-15s | Plate: %-8s | Model: %-10s | Year: %4d | Passengers: %2d",
+                    gc.getMake(), gc.getPlateNumber(), gc.getModel(), gc.getYear(), gc.getMaxPassengers());
+        } else if (v instanceof ElectricCar) {
+            ElectricCar ec = (ElectricCar) v;
+            formatted = String.format("Make: %-15s | Plate: %-8s | Model: %-10s | Year: %4d | Passengers: %2d | Autonomy: %3d km",
+                    ec.getMake(), ec.getPlateNumber(), ec.getModel(), ec.getYear(), ec.getMaxPassengers(), ec.getAutonomyRange());
+        } else {
+            formatted = String.format("Make: %-15s | Plate: %-8s | Model: %-10s | Year: %4d",
+                    v.getMake(), v.getPlateNumber(), v.getModel(), v.getYear());
+        }
+        return formatted;
+    }
+
+    // ========================= Additional Operations Helper =========================
+    private static DieselTruck getLargestTruck(DieselTruck[] dieselTrucks) {
+        DieselTruck largest = null;
+        for (DieselTruck dt : dieselTrucks) {
+            if (dt != null) {
+                if (largest == null || dt.getMaxCapacity() > largest.getMaxCapacity()) {
+                    largest = dt;
+                }
+            }
+        }
+        return largest;
+    }
+
+    private static ElectricTruck[] copyVehicles(ElectricTruck[] electricTrucks) {
+        if (electricTrucks == null) return null;
+        ElectricTruck[] copy = new ElectricTruck[electricTrucks.length];
+        for (int i = 0; i < electricTrucks.length; i++) {
+            if (electricTrucks[i] != null) {
+                copy[i] = new ElectricTruck(electricTrucks[i]); // using copy constructor
+            }
+        }
+        return copy;
     }
 }
