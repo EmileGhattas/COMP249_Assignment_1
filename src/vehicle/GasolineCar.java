@@ -6,13 +6,6 @@
 
 package vehicle;
 
-/**
- * Assignment 1 – GasolineCar class.
- * Written by: [Your Name, Your Student ID]
- *
- * A GasolineCar only has the attributes inherited from Car (including maximum number of passengers).
- * Plate numbers start with "GC" and auto-increment starting from GC1001.
- */
 public class GasolineCar extends Car {
     private static int nextPlateNumber = 1001;
 

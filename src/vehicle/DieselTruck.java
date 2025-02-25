@@ -6,13 +6,6 @@
 
 package vehicle;
 
-/**
- * Assignment 1 – DieselTruck class.
- * Written by: [Your Name, Your Student ID]
- *
- * A DieselTruck has a fuel tank capacity (in liters) in addition to Truck attributes.
- * Plate numbers start with "DT" and auto-increment starting from DT1001.
- */
 public class DieselTruck extends Truck {
     private int fuelTankCapacity;
     private static int nextPlateNumber = 1001; // starting number

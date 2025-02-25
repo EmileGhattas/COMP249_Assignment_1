@@ -6,12 +6,6 @@
 
 package vehicle;
 
-/**
- * Assignment 1 – Truck class.
- * Written by: [Your Name, Your Student ID]
- *
- * Extends Vehicle and adds the maximum capacity attribute (kg).
- */
 public class Truck extends Vehicle {
     protected int maxCapacity;
 

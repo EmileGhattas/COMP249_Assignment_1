@@ -6,12 +6,6 @@
 
 package client;
 
-/**
- * Assignment 1 – Client class.
- * Written by: [Your Name, Your Student ID]
- *
- * Represents a client in the RoyalRentals system.
- */
 public class Client {
     private String name;
     private String id;

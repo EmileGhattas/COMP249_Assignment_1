@@ -6,13 +6,6 @@
 
 package vehicle;
 
-/**
- * Assignment 1 – ElectricTruck class.
- * Written by: [Your Name, Your Student ID]
- *
- * An ElectricTruck has a maximum autonomy range (in kilometers) in addition to Truck attributes.
- * Plate numbers start with "ET" and auto-increment starting from ET1001.
- */
 public class ElectricTruck extends Truck {
     private int autonomyRange;
     private static int nextPlateNumber = 1001; // starting number for electric trucks

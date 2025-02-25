@@ -6,12 +6,6 @@
 
 package vehicle;
 
-/**
- * Assignment 1 – Car class.
- * Written by: [Your Name, Your Student ID]
- *
- * A Car has a maximum number of passengers. This class serves as the base for ElectricCar and GasolineCar.
- */
 public class Car extends Vehicle {
     protected int maxPassengers;
 

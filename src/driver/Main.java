@@ -1,8 +1,8 @@
-//-----------------------------------------------------------------
+//----------------------------------------------------------------------
 // Assignment 1
 // Question: Vehicle Fleet Management & Leasing System
 // Written by: Emile Ghattas (id: 40282552) Zeidan Chabo (id:40281196)
-//-----------------------------------------------------------------
+//----------------------------------------------------------------------
 
 package driver;
 
@@ -30,6 +30,23 @@ import java.util.Scanner;
  *   - Electric Car & Electric Truck: maximum autonomy range (km)
  *   - Diesel Truck: fuel tank capacity (liters)
  *   - Gasoline Car: maximum number of passengers
+ *
+ * The code is organized into three packages:
+ *   - driver: Contains the Main class for user interaction and overall program control.
+ *   - client: Contains classes related to client information.
+ *   - vehicle: Contains the Vehicle class hierarchy and related classes.
+ *
+ * Main Steps in the Program:
+ *   1. Display a welcome message.
+ *   2. Prompt the user to choose between the menu-driven interface or the predefined scenario.
+ *   3. If the menu-driven mode is chosen:
+ *         a. Initialize the system by setting up arrays for vehicles and clients.
+ *         b. Display the main menu for operations.
+ *         c. Process the user's choice to manage vehicles, clients, leasing, or perform additional operations.
+ *   4. If the predefined scenario is chosen:
+ *         a. Create sample vehicles and clients.
+ *         b. Execute and demonstrate all operations (leasing, returning, displaying, etc.).
+ *   5. End the program with a termination message.
  */
 
 public class Main {
@@ -102,7 +119,10 @@ public class Main {
         }
     }
 
+
+
     // ========================= Vehicle Management =========================
+
     private static void vehicleManagement() {
         System.out.println("\n--- Vehicle Management ---");
         System.out.println("1 - Add Vehicle");
@@ -256,6 +276,8 @@ public class Main {
         return -1;
     }
 
+
+
     // ========================= Client Management =========================
     private static void clientManagement() {
         System.out.println("\n--- Client Management ---");
@@ -323,6 +345,8 @@ public class Main {
         }
         return -1;
     }
+
+
 
     // ========================= Leasing Operations =========================
     private static void leasingOperations() {
@@ -421,6 +445,8 @@ public class Main {
         }
     }
 
+
+
     // ========================= Additional Operations =========================
     private static void additionalOperations() {
         System.out.println("\n--- Additional Operations ---");
@@ -468,6 +494,8 @@ public class Main {
             default -> System.out.println("Invalid choice.");
         }
     }
+
+
 
     // ========================= Predefined Scenario (Testing) =========================
     private static void predefinedScenario() {
@@ -527,6 +555,8 @@ public class Main {
         }
     }
 
+
+
     // ========================= Input Checking Methods =========================
     private static int getValidInt(String prompt) {
         int num;
@@ -568,7 +598,10 @@ public class Main {
         }
     }
 
+
+
     // ========================= Formatting Helper =========================
+
     // Returns a neat, custom formatted string for each vehicle.
     private static String formatVehicle(Vehicle v) {
         String formatted;
@@ -594,6 +627,8 @@ public class Main {
         }
         return formatted;
     }
+
+
 
     // ========================= Additional Operations Helper =========================
     private static DieselTruck getLargestTruck(DieselTruck[] dieselTrucks) {

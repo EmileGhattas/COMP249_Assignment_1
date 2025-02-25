@@ -8,12 +8,6 @@ package vehicle;
 
 import client.Client;
 
-/**
- * Assignment 1 – Vehicle class.
- * Written by: [Your Name, Your Student ID]
- *
- * Contains common attributes for all vehicles: plateNumber, make, model, year, and leasing info.
- */
 public class Vehicle {
     protected String plateNumber;
     protected String make;

@@ -6,13 +6,6 @@
 
 package vehicle;
 
-/**
- * Assignment 1 – ElectricCar class.
- * Written by: [Your Name, Your Student ID]
- *
- * An ElectricCar has a maximum autonomy range (in kilometers) in addition to Car attributes.
- * Plate numbers start with "EC" and auto-increment starting from EC1001.
- */
 public class ElectricCar extends Car {
     private int autonomyRange;
     private static int nextPlateNumber = 1001;
